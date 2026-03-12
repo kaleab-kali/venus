@@ -107,17 +107,17 @@ const ScrollHintInner = () => {
 
   return (
     <div
-      className="fixed bottom-8 left-1/2 z-30 -translate-x-1/2 flex flex-col items-center gap-2 animate-pulse"
+      className="fixed bottom-6 left-1/2 z-[999] -translate-x-1/2 flex flex-col items-center gap-2 animate-pulse"
       style={{ pointerEvents: "none" }}
     >
-      <span className="font-[EB_Garamond] text-sm tracking-[0.2em] text-venus-paper/60 uppercase">
+      <span className="rounded-full bg-venus-black/60 px-4 py-2 font-[EB_Garamond] text-sm tracking-[0.2em] text-venus-paper/80 uppercase backdrop-blur-sm md:text-base">
         scroll to begin
       </span>
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-venus-gold/60">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" className="text-venus-gold">
         <path
           d="M12 4v16m0 0l-6-6m6 6l6-6"
           stroke="currentColor"
-          strokeWidth="1.5"
+          strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
         />

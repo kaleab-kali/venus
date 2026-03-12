@@ -87,19 +87,6 @@ export function MovieIntro({ onComplete }: MovieIntroProps) {
             )}
           </AnimatePresence>
 
-          {/* Skip hint */}
-          <motion.button
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.3 }}
-            transition={{ delay: 3, duration: 1 }}
-            onClick={() => {
-              setPhase("done")
-              onComplete()
-            }}
-            className="absolute bottom-8 font-[EB_Garamond] text-sm tracking-wider text-venus-paper/40 hover:text-venus-paper/60 transition-colors cursor-pointer"
-          >
-            click to skip
-          </motion.button>
         </motion.div>
     </AnimatePresence>
   )
