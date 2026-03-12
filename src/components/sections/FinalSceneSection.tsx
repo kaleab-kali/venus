@@ -2,7 +2,7 @@ import { motion } from "framer-motion"
 
 export function FinalSceneSection() {
   return (
-    <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-venus-black">
+    <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-venus-black/80" style={{ zIndex: 20 }}>
       {/* CSS starfield */}
       <div className="absolute inset-0 overflow-hidden">
         {Array.from({ length: 50 }).map((_, i) => (
@@ -62,7 +62,10 @@ export function FinalSceneSection() {
             Happy Birthday
           </p>
           <p className="mt-2 font-[Cinzel] text-5xl font-bold tracking-[0.3em] text-venus-gold md:text-7xl">
-            VENUS
+            Veni
+          </p>
+          <p className="mt-8 font-[EB_Garamond] text-lg tracking-wide text-venus-paper/50 italic">
+            by KG, a great admirer
           </p>
         </motion.div>
       </motion.div>
