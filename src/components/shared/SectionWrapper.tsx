@@ -15,6 +15,7 @@ export function SectionWrapper({ children, className = "", id }: SectionWrapperP
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.8, ease: "easeOut" }}
       className={className}
+      style={{ position: "relative", zIndex: 20 }}
     >
       {children}
     </motion.section>

@@ -12,6 +12,8 @@ export const COLORS = {
 // === CAMERA ===
 export const CAMERA = {
   fov: 45,
+  fovTablet: 55,
+  fovMobile: 65,
   near: 0.1,
   far: 1000,
   startPos: [0, 4, 20] as Vector3Tuple,
@@ -41,14 +43,14 @@ export const SCROLL_PHASES = {
   interplanetaryTravel: [0.32, 0.50] as [number, number],
   earthApproach: [0.50, 0.62] as [number, number],
   africaZoom: [0.62, 0.75] as [number, number],
-  libraryLanding: [0.75, 0.93] as [number, number],
-  landingFlash: [0.93, 1.0] as [number, number],
+  confettiCelebration: [0.75, 1.0] as [number, number],
 }
 
-// === LIBRARY SCENE ===
-export const LIBRARY = {
-  position: [0, -50, -240] as Vector3Tuple,
-}
+// === AUTO-SCROLL ===
+export const AUTO_SCROLL = {
+  delayMs: 800,
+  durationSeconds: 120,
+} as const
 
 // === LIGHTING ===
 export const LIGHTING = {

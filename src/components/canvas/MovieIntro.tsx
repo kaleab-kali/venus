@@ -79,7 +79,7 @@ export function MovieIntro({ onComplete }: MovieIntroProps) {
                 style={{ textAlign: "center", marginTop: "2rem" }}
               >
                 <TypewriterLine
-                  text="a life was born"
+                  text="A Star was born"
                   className="font-[EB_Garamond] text-xl md:text-3xl tracking-[0.15em] text-venus-paper/70 italic"
                   speed={70}
                 />

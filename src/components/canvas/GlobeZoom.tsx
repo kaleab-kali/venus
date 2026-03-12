@@ -25,7 +25,7 @@ const ESRI_SATELLITE_STYLE: maplibregl.StyleSpecification = {
 const ADDIS_ABABA = { lng: 38.7578, lat: 9.0192 } as const
 
 // Zoom keyframes: each step is { center, zoom, pitch, bearing }
-const ZOOM_KEYFRAMES = [
+const ZOOM_KEYFRAMES_DESKTOP = [
   { center: [38.0, 15.0], zoom: 2.5, pitch: 0, bearing: 0 },
   { center: [38.0, 10.0], zoom: 4.0, pitch: 20, bearing: 10 },
   { center: [38.5, 9.5], zoom: 6.5, pitch: 35, bearing: 15 },
@@ -33,14 +33,26 @@ const ZOOM_KEYFRAMES = [
   { center: [ADDIS_ABABA.lng, ADDIS_ABABA.lat], zoom: 14, pitch: 60, bearing: 30 },
 ] as const
 
-function interpolateKeyframes(t: number) {
-  const totalFrames = ZOOM_KEYFRAMES.length - 1
+const ZOOM_KEYFRAMES_MOBILE = [
+  { center: [38.0, 15.0], zoom: 1.5, pitch: 0, bearing: 0 },
+  { center: [38.0, 10.0], zoom: 3.0, pitch: 15, bearing: 5 },
+  { center: [38.5, 9.5], zoom: 5.5, pitch: 25, bearing: 10 },
+  { center: [ADDIS_ABABA.lng, ADDIS_ABABA.lat], zoom: 9, pitch: 40, bearing: 15 },
+  { center: [ADDIS_ABABA.lng, ADDIS_ABABA.lat], zoom: 12, pitch: 50, bearing: 20 },
+] as const
+
+const MOBILE_BREAKPOINT = 768
+
+type KeyframeSet = readonly { readonly center: readonly [number, number]; readonly zoom: number; readonly pitch: number; readonly bearing: number }[]
+
+const interpolateKeyframes = (t: number, keyframes: KeyframeSet) => {
+  const totalFrames = keyframes.length - 1
   const rawIdx = t * totalFrames
   const idx = Math.min(Math.floor(rawIdx), totalFrames - 1)
   const frac = rawIdx - idx
 
-  const a = ZOOM_KEYFRAMES[idx]
-  const b = ZOOM_KEYFRAMES[idx + 1]
+  const a = keyframes[idx]
+  const b = keyframes[idx + 1]
 
   return {
     center: [
@@ -58,6 +70,9 @@ export function GlobeZoom() {
   const mapRef = useRef<maplibregl.Map | null>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
   const [mounted, setMounted] = useState(false)
+  const keyframesRef = useRef(
+    globalThis.innerWidth < MOBILE_BREAKPOINT ? ZOOM_KEYFRAMES_MOBILE : ZOOM_KEYFRAMES_DESKTOP
+  )
 
   useEffect(() => {
     setMounted(true)
@@ -102,11 +117,11 @@ export function GlobeZoom() {
         return
       }
 
-      // Globe is visible during africaZoom and libraryLanding phases
+      // Globe is visible during africaZoom phase
       const globeStart = SCROLL_PHASES.africaZoom[0]
-      const globeEnd = SCROLL_PHASES.libraryLanding[0]
+      const globeEnd = SCROLL_PHASES.confettiCelebration[0]
 
-      // Fade in slightly before africaZoom starts, fade out at libraryLanding
+      // Fade in slightly before africaZoom starts, fade out at confetti
       const fadeInStart = globeStart - 0.03
       const fadeOutEnd = globeEnd + 0.05
 
@@ -136,7 +151,7 @@ export function GlobeZoom() {
       if (map && p >= fadeInStart && p <= fadeOutEnd) {
         const zoomProgress = getPhaseProgress(p, [globeStart, globeEnd])
         const easedT = easeInOutCubic(Math.max(0, Math.min(1, zoomProgress)))
-        const kf = interpolateKeyframes(easedT)
+        const kf = interpolateKeyframes(easedT, keyframesRef.current)
 
         map.jumpTo({
           center: kf.center,
