@@ -9,7 +9,6 @@ import {
   getPhaseProgress,
   POSITIONS,
   BEZIER_POINTS,
-  LIBRARY,
 } from "@/lib/constants"
 import { cubicBezierFromTuples } from "@/lib/bezier"
 
@@ -18,14 +17,8 @@ const _venusRevealPos = new THREE.Vector3(...CAMERA.venusRevealPos)
 const _orbitPos = new THREE.Vector3(...CAMERA.orbitPos)
 const _venusPos = new THREE.Vector3(...POSITIONS.venus)
 const _earthPos = new THREE.Vector3(...POSITIONS.earth)
-const _libraryPos = new THREE.Vector3(...LIBRARY.position)
 const _tempPos = new THREE.Vector3()
 const _tempLookAt = new THREE.Vector3()
-
-// Ethiopia surface point: camera approaches from +Z toward Earth center
-// The Earth rotates to show Ethiopia, so the camera just needs to go straight at it
-// Slight offset for latitude (Ethiopia ~9N = slightly above equator)
-const _ethiopiaSurface = _earthPos.clone().add(new THREE.Vector3(0, 0.9, 7.5))
 
 export function CameraRig() {
   const { camera } = useThree()
@@ -79,8 +72,8 @@ export function CameraRig() {
       )
       _tempLookAt.copy(lookAhead)
     }
-    // Phase 5: Earth approach (0.50 - 0.62) - approach and see full Earth with Africa
-    else if (p <= SCROLL_PHASES.earthApproach[1]) {
+    // Phase 5: Earth approach (0.50 - 0.62) - approach Earth, then R3F canvas fades out
+    else {
       const t = easeInOutCubic(
         getPhaseProgress(p, SCROLL_PHASES.earthApproach),
       )
@@ -92,44 +85,9 @@ export function CameraRig() {
         BEZIER_POINTS.P3,
       )
       const startCam = travelEndPos.clone().add(new THREE.Vector3(5, 4, 15))
-      // End position: directly in front of Earth, centered
       const earthFrontPos = _earthPos.clone().add(new THREE.Vector3(0, 1, 18))
       _tempPos.lerpVectors(startCam, earthFrontPos, t)
       _tempLookAt.lerpVectors(travelEndPos, _earthPos, t)
-    }
-    // Phase 6: Africa zoom (0.62 - 0.75) - dive into Ethiopia/Addis Ababa
-    else if (p <= SCROLL_PHASES.africaZoom[1]) {
-      const t = easeInOutCubic(
-        getPhaseProgress(p, SCROLL_PHASES.africaZoom),
-      )
-      // Start: in front of Earth
-      const earthFrontPos = _earthPos.clone().add(new THREE.Vector3(0, 1, 18))
-      // End: very close to Ethiopia on the surface
-      const closeToEthiopia = _ethiopiaSurface.clone().add(new THREE.Vector3(0, 0.5, 1.5))
-
-      _tempPos.lerpVectors(earthFrontPos, closeToEthiopia, t)
-      // Look at gradually shifts to the Ethiopia point
-      _tempLookAt.lerpVectors(_earthPos, _ethiopiaSurface, t)
-    }
-    // Phase 7: Library landing (0.75 - 0.93) - descend through atmosphere into library
-    else if (p <= SCROLL_PHASES.libraryLanding[1]) {
-      const t = easeInOutCubic(
-        getPhaseProgress(p, SCROLL_PHASES.libraryLanding),
-      )
-      const closeToEthiopia = _ethiopiaSurface.clone().add(new THREE.Vector3(0, 0.5, 1.5))
-      // Library camera: inside, looking at the back wall of books
-      const libCamPos = _libraryPos.clone().add(new THREE.Vector3(0, 0, 8))
-      const libLookAt = _libraryPos.clone().add(new THREE.Vector3(0, -1, -6))
-
-      _tempPos.lerpVectors(closeToEthiopia, libCamPos, t)
-      _tempLookAt.lerpVectors(_ethiopiaSurface, libLookAt, t)
-    }
-    // Phase 8: Landing flash (0.93 - 1.00)
-    else {
-      const libCamPos = _libraryPos.clone().add(new THREE.Vector3(0, 0, 8))
-      const libLookAt = _libraryPos.clone().add(new THREE.Vector3(0, -1, -6))
-      _tempPos.copy(libCamPos)
-      _tempLookAt.copy(libLookAt)
     }
 
     camera.position.lerp(_tempPos, 0.1)

@@ -7,8 +7,8 @@ import { CameraRig } from "./CameraRig"
 import { VenusSystem } from "./VenusSystem"
 import { ShootingStar } from "./ShootingStar"
 import { EarthSystem } from "./EarthSystem"
-import { LibraryScene } from "./LibraryScene"
 import { scrollStore } from "@/lib/scroll-store"
+import { SCROLL_PHASES } from "@/lib/constants"
 
 export function CinematicCanvas() {
   const [mounted, setMounted] = useState(false)
@@ -24,11 +24,16 @@ export function CinematicCanvas() {
     function update() {
       if (containerRef.current) {
         const p = scrollStore.progress
-        if (p >= 1) {
+        const fadeStart = SCROLL_PHASES.africaZoom[0] - 0.02
+        const fadeEnd = SCROLL_PHASES.africaZoom[0]
+
+        if (p >= fadeEnd) {
+          // R3F canvas hidden once MapLibre globe takes over
           containerRef.current.style.opacity = "0"
           containerRef.current.style.display = "none"
-        } else if (p >= 0.93) {
-          const fadeOut = 1 - (p - 0.93) / 0.07
+        } else if (p >= fadeStart) {
+          // Crossfade out to MapLibre
+          const fadeOut = 1 - (p - fadeStart) / (fadeEnd - fadeStart)
           containerRef.current.style.display = "block"
           containerRef.current.style.opacity = String(fadeOut)
         } else {
@@ -75,7 +80,6 @@ export function CinematicCanvas() {
           <VenusSystem />
           <ShootingStar />
           <EarthSystem />
-          <LibraryScene />
         </Suspense>
       </Canvas>
     </div>

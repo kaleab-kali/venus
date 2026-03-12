@@ -3,6 +3,8 @@ import { useState, useCallback, useEffect } from "react"
 import { ScrollProvider } from "@/components/providers/ScrollProvider"
 import { CinematicCanvas } from "@/components/canvas/CinematicCanvas"
 import { LandingFlash } from "@/components/canvas/LandingFlash"
+import { GlobeZoom } from "@/components/canvas/GlobeZoom"
+import { LibraryScene } from "@/components/canvas/LibraryScene"
 import { MovieIntro } from "@/components/canvas/MovieIntro"
 import { HeroSection } from "@/components/sections/HeroSection"
 import { MeaningSection } from "@/components/sections/MeaningSection"
@@ -36,6 +38,12 @@ function App() {
 
       {/* Fixed 3D Canvas */}
       <CinematicCanvas />
+
+      {/* MapLibre satellite globe zoom (Africa -> Ethiopia -> Addis Ababa) */}
+      <GlobeZoom />
+
+      {/* Library landing scene (Addis Ababa) */}
+      <LibraryScene />
 
       {/* Landing flash overlay */}
       <LandingFlash />
