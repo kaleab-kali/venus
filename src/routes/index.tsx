@@ -1,19 +1,101 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { Button } from "@/components/ui/button"
+import { useState, useCallback, useEffect } from "react"
+import { ScrollProvider } from "@/components/providers/ScrollProvider"
+import { CinematicCanvas } from "@/components/canvas/CinematicCanvas"
+import { LandingFlash } from "@/components/canvas/LandingFlash"
+import { MovieIntro } from "@/components/canvas/MovieIntro"
+import { HeroSection } from "@/components/sections/HeroSection"
+import { MeaningSection } from "@/components/sections/MeaningSection"
+import { DostoevskyRoom } from "@/components/sections/DostoevskyRoom"
+import { GardenSection } from "@/components/sections/GardenSection"
+import { TimelineSection } from "@/components/sections/TimelineSection"
+import { LetterSection } from "@/components/sections/LetterSection"
+import { PoetrySection } from "@/components/sections/PoetrySection"
+import { GiftBoxesSection } from "@/components/sections/GiftBoxesSection"
+import { FinalSceneSection } from "@/components/sections/FinalSceneSection"
 
 export const Route = createFileRoute("/")({ component: App })
 
 function App() {
+  const [introComplete, setIntroComplete] = useState(false)
+
+  // Always reset scroll to top on mount/refresh
+  useEffect(() => {
+    window.history.scrollRestoration = "manual"
+    window.scrollTo(0, 0)
+  }, [])
+
+  const handleIntroComplete = useCallback(() => {
+    setIntroComplete(true)
+  }, [])
+
   return (
-    <div className="flex min-h-svh p-6">
-      <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-        <div>
-          <h1 className="font-medium">Project ready!</h1>
-          <p>You may now add components and start building.</p>
-          <p>We&apos;ve already added the button component for you.</p>
-          <Button className="mt-2">Button</Button>
-        </div>
-      </div>
+    <>
+      {/* Movie intro overlay */}
+      {!introComplete && <MovieIntro onComplete={handleIntroComplete} />}
+
+      {/* Fixed 3D Canvas */}
+      <CinematicCanvas />
+
+      {/* Landing flash overlay */}
+      <LandingFlash />
+
+      {/* Scroll hint after intro */}
+      {introComplete && <ScrollHint />}
+
+      {/* Scroll-driven content */}
+      <ScrollProvider>
+        {/* 2D Sections (appear after the scroll spacer) */}
+        <HeroSection />
+        <MeaningSection />
+        <DostoevskyRoom />
+        <GardenSection />
+        <TimelineSection />
+        <LetterSection />
+        <PoetrySection />
+        <GiftBoxesSection />
+        <FinalSceneSection />
+      </ScrollProvider>
+    </>
+  )
+}
+
+function ScrollHint() {
+  const [visible, setVisible] = useState(true)
+
+  useEffect(() => {
+    const onScroll = () => {
+      if (window.scrollY > 50) setVisible(false)
+    }
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
+
+  if (!visible) return null
+
+  return (
+    <div
+      className="fixed bottom-8 left-1/2 z-30 -translate-x-1/2 flex flex-col items-center gap-2 animate-pulse"
+      style={{ pointerEvents: "none" }}
+    >
+      <span className="font-[EB_Garamond] text-sm tracking-[0.2em] text-venus-paper/60 uppercase">
+        scroll to begin
+      </span>
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        className="text-venus-gold/60"
+      >
+        <path
+          d="M12 4v16m0 0l-6-6m6 6l6-6"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
     </div>
   )
 }

@@ -1,0 +1,5 @@
+import "@fontsource/cinzel/400.css"
+import "@fontsource/cinzel/700.css"
+import "@fontsource/eb-garamond/400.css"
+import "@fontsource/eb-garamond/400-italic.css"
+import "@fontsource/eb-garamond/700.css"
