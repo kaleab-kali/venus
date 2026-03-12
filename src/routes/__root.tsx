@@ -46,7 +46,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <LenisProvider>{children}</LenisProvider>
-        <Analytics />
+        <Analytics mode={import.meta.env.PROD ? "production" : "development"} />
         <Scripts />
       </body>
     </html>
