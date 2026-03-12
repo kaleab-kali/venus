@@ -1,4 +1,7 @@
+import { inject } from "@vercel/analytics"
 import { createFileRoute } from "@tanstack/react-router"
+
+inject()
 import { useState, useCallback, useEffect, useRef, memo } from "react"
 import { ScrollProvider } from "@/components/providers/ScrollProvider"
 import { CinematicCanvas } from "@/components/canvas/CinematicCanvas"
