@@ -1,7 +1,10 @@
 import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router"
+import { inject } from "@vercel/analytics"
 import { LenisProvider } from "@/components/providers/LenisProvider"
 import "@/lib/fonts"
 import appCss from "../styles.css?url"
+
+inject()
 
 export const Route = createRootRoute({
   head: () => ({

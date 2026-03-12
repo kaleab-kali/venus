@@ -1,7 +1,4 @@
-import { inject } from "@vercel/analytics"
 import { createFileRoute } from "@tanstack/react-router"
-
-inject()
 import { useState, useCallback, useEffect, useRef, memo } from "react"
 import { ScrollProvider } from "@/components/providers/ScrollProvider"
 import { CinematicCanvas } from "@/components/canvas/CinematicCanvas"
@@ -19,6 +16,7 @@ import { BirthdayWishes } from "@/components/sections/BirthdayWishes"
 import { FinalSceneSection } from "@/components/sections/FinalSceneSection"
 import { useLenisInstance } from "@/lib/lenis-context"
 import { AUTO_SCROLL, SCROLL_SPACER_HEIGHT } from "@/lib/constants"
+import { preloadAllAssets } from "@/lib/preload-assets"
 
 export const Route = createFileRoute("/")({ component: App })
 
@@ -30,6 +28,7 @@ function App() {
   useEffect(() => {
     globalThis.history.scrollRestoration = "manual"
     globalThis.scrollTo(0, 0)
+    preloadAllAssets()
   }, [])
 
   const handleIntroComplete = useCallback(() => {
