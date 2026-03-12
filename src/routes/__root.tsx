@@ -1,10 +1,8 @@
 import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router"
-import { inject } from "@vercel/analytics"
+import { Analytics } from "@vercel/analytics/react"
 import { LenisProvider } from "@/components/providers/LenisProvider"
 import "@/lib/fonts"
 import appCss from "../styles.css?url"
-
-inject()
 
 export const Route = createRootRoute({
   head: () => ({
@@ -48,6 +46,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <LenisProvider>{children}</LenisProvider>
+        <Analytics />
         <Scripts />
       </body>
     </html>
